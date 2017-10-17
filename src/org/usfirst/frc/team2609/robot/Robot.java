@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto mode", chooser);
 		
 		//subsystem initialization
-		shifter = new Shifter();
+		shifter = shifter.getInstance();
 		
 	}
 

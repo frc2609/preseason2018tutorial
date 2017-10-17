@@ -14,6 +14,8 @@ public class Pneumatics {
 	private EnumMap<PneumaticState, DoubleSolenoid.Value> m_pneumaticMap;
 	private PneumaticSensorInput m_sensors = null; // initialize as null so we can check if it exists
 	private Map<DoubleSolenoid.Value, PneumaticState> m_reversePneumaticMap;
+	boolean neutralAfterSet = false;
+	
 	public Pneumatics(DoubleSolenoid solenoid, EnumMap<PneumaticState, DoubleSolenoid.Value> pneumaticmap){
 		this.m_solenoid = solenoid;
 		this.m_pneumaticMap = pneumaticmap;
@@ -42,6 +44,5 @@ public class Pneumatics {
 		}
 	}
 	
-	boolean neutralAfterSet = false;
 }
 
