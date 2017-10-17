@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import enums.ShifterState;
 
 import org.usfirst.frc.team2609.robot.commands.ExampleCommand;
-import org.usfirst.frc.team2609.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team2609.robot.subsystems.*;
 
 /**
@@ -44,7 +43,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto mode", chooser);
 		
 		//subsystem initialization
-		shifter = shifter.getInstance();
+		shifter = new Shifter();
 		
 	}
 
