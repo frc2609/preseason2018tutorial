@@ -10,14 +10,17 @@ import enums.ShifterState;
  */
 public class shifterState extends Command {
 
-    public shifterState() {
+    private ShifterState desiredState;
+
+	public shifterState(ShifterState desiredState) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	this.desiredState = desiredState;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.shifter.setShifterState(ShifterState.HIGH);
+    	Robot.shifter.setShifterState(desiredState);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -26,7 +29,7 @@ public class shifterState extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

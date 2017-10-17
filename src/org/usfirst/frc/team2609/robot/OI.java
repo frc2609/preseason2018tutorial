@@ -3,6 +3,8 @@ package org.usfirst.frc.team2609.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import enums.ShifterState;
+import org.usfirst.frc.team2609.robot.commands.*;
 
 import org.usfirst.frc.team2609.robot.commands.ExampleCommand;
 
@@ -41,9 +43,19 @@ public class OI {
 	
 	public static Joystick driverStick;
 	public static JoystickButton driverButton1;
+	public static JoystickButton driverButton2;
 	
 	public static Joystick operatorStick;
 	public static JoystickButton operatorButton1;
+	
+	public OI(){
+		driverButton1 = new JoystickButton(driverStick, 1);
+		driverButton1.whenPressed(new shifterState(ShifterState.HIGH));
+
+		driverButton2 = new JoystickButton(driverStick, 2);
+		driverButton2.whenPressed(new shifterState(ShifterState.LOW));
+	}
+	
 	
 	
 	

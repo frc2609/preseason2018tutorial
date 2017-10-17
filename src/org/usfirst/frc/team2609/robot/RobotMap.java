@@ -92,13 +92,7 @@ public class RobotMap {
 			DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
 		}
 		
-		//camera error handling
-		try {
-			ahrs = new AHRS(SPI.Port.kMXP);
-			LiveWindow.addSensor("Drivetrain", "AHRS", ahrs);
-		} catch (RuntimeException ex){
-			DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
-		}
+		
 	}
 	
 	
