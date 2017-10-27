@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import enums.DriveState;
 import enums.ShifterState;
 
 import org.usfirst.frc.team2609.robot.commands.ExampleCommand;
+import org.usfirst.frc.team2609.robot.commands.driveState;
 import org.usfirst.frc.team2609.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team2609.robot.subsystems.*;
 
@@ -99,6 +101,8 @@ public class Robot extends IterativeRobot {
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null)
 			autonomousCommand.start();
+
+		new driveState(DriveState.AUTON).start();
 	}
 
 	/**
@@ -107,6 +111,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		
 	}
 
 	@Override
@@ -117,6 +122,7 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		new driveState(DriveState.TELEOP).start();
 	}
 
 	/**
@@ -125,6 +131,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		
+		drivetrain.setDriveState(driveState.desiredState);
 	}
 
 	/**

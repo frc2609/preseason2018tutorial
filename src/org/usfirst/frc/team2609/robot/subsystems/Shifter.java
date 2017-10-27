@@ -18,12 +18,16 @@ public class Shifter extends Subsystem {
 		switch(desiredState){
 		case HIGH:
 			RobotMap.driveShifter.set(DoubleSolenoid.Value.kReverse);
+			break;
 		case LOW:
 			RobotMap.driveShifter.set(DoubleSolenoid.Value.kForward);
+			break;
 		case NEUTRAL:
 			RobotMap.driveShifter.set(DoubleSolenoid.Value.kOff);
+			break;
 		default:
 			RobotMap.driveShifter.set(DoubleSolenoid.Value.kOff);
+			break;
 		}
 	}
 

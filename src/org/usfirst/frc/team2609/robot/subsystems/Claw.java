@@ -19,16 +19,22 @@ public class Claw extends Subsystem {
 		switch(desiredState){
 		case UP:
 			RobotMap.clawDeploy.set(DoubleSolenoid.Value.kReverse);
+			break;
 		case DOWN:
 			RobotMap.clawDeploy.set(DoubleSolenoid.Value.kForward);
+			break;
 		case OPEN:
 			RobotMap.clawGrab.set(DoubleSolenoid.Value.kForward);
+			break;
 		case CLOSE:
 			RobotMap.clawGrab.set(DoubleSolenoid.Value.kReverse);
+			break;
 		case PUSH:
 			RobotMap.clawPusher.set(DoubleSolenoid.Value.kReverse);
+			break;
 		case RETRACT:
 			RobotMap.clawPusher.set(DoubleSolenoid.Value.kForward);
+			break;
 		default:	//UPCLOSE
 			RobotMap.clawGrab.set(DoubleSolenoid.Value.kReverse);
 			RobotMap.clawDeploy.set(DoubleSolenoid.Value.kReverse);
@@ -38,10 +44,6 @@ public class Claw extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
-    }
-    
-    public void clawState(){
-    	
     }
 }
 
