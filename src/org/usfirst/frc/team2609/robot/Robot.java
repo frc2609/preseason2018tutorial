@@ -102,7 +102,7 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 
-		new driveState(DriveState.AUTON).start();
+		new driveState(DriveState.AUTON,0,0).start();
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
-		new driveState(DriveState.TELEOP).start();
+		new driveState(DriveState.TELEOP,0,0).start();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		
-		drivetrain.setDriveState(driveState.desiredState);
+//		drivetrain.setDriveState(driveState.desiredState);
 	}
 
 	/**

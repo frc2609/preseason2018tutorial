@@ -17,7 +17,7 @@ public class Drivetrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
-	public void setDriveState(DriveState desiredState){
+	public void setDriveState(DriveState desiredState,double leftPower, double rightPower){
 		switch(desiredState){
 		case TELEOP:
 			double X = OI.driverStick.getRawAxis(1);
@@ -41,10 +41,15 @@ public class Drivetrain extends Subsystem {
 	        RobotMap.driveRight2.set(right);
 			break;
 		case AUTON:
-			RobotMap.driveLeft1.set(100);
-	        RobotMap.driveLeft2.set(100);
-	        RobotMap.driveRight1.set(100);
-	        RobotMap.driveRight2.set(100);
+			RobotMap.driveLeft1.set(leftPower);
+	        RobotMap.driveLeft2.set(leftPower);
+	        RobotMap.driveRight1.set(rightPower);
+	        RobotMap.driveRight2.set(rightPower);
+		case DISABLE:
+	        RobotMap.driveLeft1.set(0);
+	        RobotMap.driveLeft2.set(0);
+	        RobotMap.driveRight1.set(0);
+	        RobotMap.driveRight2.set(0);
 		default:
 	        RobotMap.driveLeft1.set(0);
 	        RobotMap.driveLeft2.set(0);
