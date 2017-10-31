@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2609.robot.commands;
+package org.usfirst.frc.team2609.robot.commands.drive;
 
 import org.usfirst.frc.team2609.robot.Robot;
 import org.usfirst.frc.team2609.robot.RobotMap;
@@ -20,7 +20,7 @@ public class driveState extends Command {
 	public driveState(DriveState desiredState,double leftPower,double rightPower) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	driveState.desiredState = desiredState;
+		requires(Robot.drivetrain);
     	this.leftPower = leftPower;
     	this.rightPower = rightPower;
     }

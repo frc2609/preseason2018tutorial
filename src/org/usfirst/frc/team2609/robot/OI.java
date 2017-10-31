@@ -1,13 +1,13 @@
 package org.usfirst.frc.team2609.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import enums.ClawState;
+import enums.DriveState;
 import enums.ShifterState;
 import org.usfirst.frc.team2609.robot.commands.*;
 
-import org.usfirst.frc.team2609.robot.commands.ExampleCommand;
+import org.usfirst.frc.team2609.robot.commands.drive.driveStraight;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -51,6 +51,8 @@ public class OI {
 	public static JoystickButton driverButton6;
 	public static JoystickButton driverButton7;
 	public static JoystickButton driverButton8;
+	public static JoystickButton driverButton9;
+	public static JoystickButton driverButton10;
 	
 	public static Joystick operatorStick;
 	public static JoystickButton operatorButton1;
@@ -81,6 +83,9 @@ public class OI {
 		
 		driverButton6 = new JoystickButton(driverStick, 8);
 		driverButton6.whenPressed(new clawState(ClawState.RETRACT));
+		
+		driverButton10 = new JoystickButton(driverStick, 10);
+		driverButton10.whenPressed(new driveStraight(DriveState.AUTON,50,50,0));
 		
 		
 	}

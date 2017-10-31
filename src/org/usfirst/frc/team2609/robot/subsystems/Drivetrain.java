@@ -2,6 +2,7 @@ package org.usfirst.frc.team2609.robot.subsystems;
 
 import org.usfirst.frc.team2609.robot.OI;
 import org.usfirst.frc.team2609.robot.RobotMap;
+import org.usfirst.frc.team2609.robot.commands.drive.driveTeleop;
 
 import com.ctre.CANTalon.TalonControlMode;
 
@@ -20,25 +21,10 @@ public class Drivetrain extends Subsystem {
 	public void setDriveState(DriveState desiredState,double leftPower, double rightPower){
 		switch(desiredState){
 		case TELEOP:
-			double X = OI.driverStick.getRawAxis(1);
-	        double Y = -OI.driverStick.getRawAxis(0);
-	        double left = 0;
-	        double right = 0;
-	        double deadzone = 0.15;
-	        
-	        if(Math.abs(X)<deadzone && Math.abs(Y)<deadzone){
-	            left=0;
-	            right =0;
-	        }
-	        else{
-	        	left	= Y+(X*(1-Math.abs(.2*Y)));
-	            right	= Y-(X*(1-Math.abs(.2*Y)));
-	        }
-
-	        RobotMap.driveLeft1.set(left);
-	        RobotMap.driveLeft2.set(left);
-	        RobotMap.driveRight1.set(right);
-	        RobotMap.driveRight2.set(right);
+	        RobotMap.driveLeft1.set(leftPower);
+	        RobotMap.driveLeft2.set(leftPower);
+	        RobotMap.driveRight1.set(rightPower);
+	        RobotMap.driveRight2.set(rightPower);
 			break;
 		case AUTON:
 			RobotMap.driveLeft1.set(leftPower);
@@ -50,6 +36,7 @@ public class Drivetrain extends Subsystem {
 	        RobotMap.driveLeft2.set(0);
 	        RobotMap.driveRight1.set(0);
 	        RobotMap.driveRight2.set(0);
+			new driveTeleop().start();
 		default:
 	        RobotMap.driveLeft1.set(0);
 	        RobotMap.driveLeft2.set(0);
