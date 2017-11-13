@@ -68,8 +68,16 @@ public class RobotMap {
 		
 		driveLeft1.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		driveLeft1.configEncoderCodesPerRev(51);
+		driveLeft1.setInverted(true);
+		driveLeft1.reverseSensor(true);
+		driveLeft2.setInverted(true);
+		driveLeft2.reverseSensor(true);
 		driveRight1.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		driveRight1.configEncoderCodesPerRev(51);
+		driveRight1.setInverted(false);
+		driveRight1.reverseSensor(false);
+		driveRight2.setInverted(false);
+		driveRight2.reverseSensor(false);
 		
 		//claw
 		clawGrab = new DoubleSolenoid(0,7,6);

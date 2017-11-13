@@ -85,7 +85,7 @@ public class OI {
 		driverButton6.whenPressed(new clawState(ClawState.RETRACT));
 		
 		driverButton10 = new JoystickButton(driverStick, 10);
-		driverButton10.whenPressed(new driveStraight(DriveState.AUTON,50,50,0));
+		driverButton10.whenPressed(new driveStraight(20,20,0));
 		
 		
 	}

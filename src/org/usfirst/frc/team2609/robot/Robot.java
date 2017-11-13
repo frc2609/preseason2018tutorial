@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import enums.DriveState;
+import enums.ClawState;
 import enums.ShifterState;
 
-import org.usfirst.frc.team2609.robot.commands.ExampleCommand;
+import org.usfirst.frc.team2609.robot.commands.clawState;
+import org.usfirst.frc.team2609.robot.commands.drive.driveStraight;
 import org.usfirst.frc.team2609.robot.commands.drive.driveTeleop;
-import org.usfirst.frc.team2609.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team2609.robot.subsystems.*;
 
 /**
@@ -23,8 +23,6 @@ import org.usfirst.frc.team2609.robot.subsystems.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	
 	//subsystem initialization
 	public static Shifter shifter;
@@ -52,11 +50,41 @@ public class Robot extends IterativeRobot {
 		drivetrain = new Drivetrain();
 		
 		oi = new OI();
-		chooser.addDefault("Default Auto", new ExampleCommand());
+		
+		//SmartDashboard Values initialization
+		//Left drive PID
+		SmartDashboard.putNumber("DriveLeft P: ", 0.02);
+    	SmartDashboard.putNumber("DriveLeft I: ", 0.0005);
+    	SmartDashboard.putNumber("DriveLeft D: ", 0.0);
+    	SmartDashboard.putNumber("DriveLeft Max: ", 0.8);
+    	SmartDashboard.putNumber("DriveLeft Eps: ", 1.0);
+    	SmartDashboard.putNumber("DriveLeft DR: ", 1.0);
+    	SmartDashboard.putNumber("DriveLeft DC: ", 5);
+    	//Right drive PID
+		SmartDashboard.putNumber("DriveRight P: ", 0.02);
+    	SmartDashboard.putNumber("DriveRight I: ", 0.0005);
+    	SmartDashboard.putNumber("DriveRight D: ", 0.0);
+    	SmartDashboard.putNumber("DriveRight Max: ", 0.8);
+    	SmartDashboard.putNumber("DriveRight Eps: ", 1.0);
+    	SmartDashboard.putNumber("DriveRight DR: ", 1.0);
+    	SmartDashboard.putNumber("DriveRight DC: ", 5);
+    	//Steering heading correction PID
+		SmartDashboard.putNumber("Steering P: ", 0.05);
+    	SmartDashboard.putNumber("Steering I: ", 0.000);
+    	SmartDashboard.putNumber("Steering D: ", 0.0);
+    	SmartDashboard.putNumber("Steering Max: ", 0.2);
+
+		//sensor values
+		SmartDashboard.putNumber("Gyro getYaw", RobotMap.ahrs.getYaw());
+    	SmartDashboard.putNumber("driveLeft1.getPosition()", RobotMap.driveLeft1.getPosition());
+    	SmartDashboard.putNumber("driveRight1.getPosition()", RobotMap.driveRight1.getPosition());
+		
+		chooser.addDefault("drive straight 10", new driveStraight(10,10,0));
+        chooser.addObject("drive straight 50", new driveStraight(50,50,0));
+        chooser.addObject("drive straight 100", new driveStraight(100,100,0));
+        chooser.addObject("open claw", new clawState(ClawState.OPEN));
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
-		
-		//subsystem initialization
 		
 	}
 
@@ -68,12 +96,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		shifter.setShifterState(ShifterState.HIGH); //makes it easier to push the robot when its disabled
-
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		
+		//sensor values
+		SmartDashboard.putNumber("Gyro getYaw", RobotMap.ahrs.getYaw());
+    	SmartDashboard.putNumber("driveLeft1.getPosition()", RobotMap.driveLeft1.getPosition());
+    	SmartDashboard.putNumber("driveRight1.getPosition()", RobotMap.driveRight1.getPosition());
 	}
 
 	/**
@@ -89,6 +121,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		Robot.drivetrain.resetDriveEncoders();
+		Robot.drivetrain.resetGyro();
 		autonomousCommand = chooser.getSelected();
 
 		/*
@@ -99,6 +133,7 @@ public class Robot extends IterativeRobot {
 		 */
 
 		// schedule the autonomous command (example)
+    	
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}
@@ -109,6 +144,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+
+		//sensor values
+		SmartDashboard.putNumber("Gyro getYaw", RobotMap.ahrs.getYaw());
+    	SmartDashboard.putNumber("driveLeft1.getPosition()", RobotMap.driveLeft1.getPosition());
+    	SmartDashboard.putNumber("driveRight1.getPosition()", RobotMap.driveRight1.getPosition());
+    	SmartDashboard.putNumber("driveLeft1.getOutputVoltage()", RobotMap.driveLeft1.getOutputVoltage());
+    	SmartDashboard.putNumber("driveRight1.getOutputVoltage()", RobotMap.driveRight1.getOutputVoltage());
 		
 	}
 
@@ -120,6 +162,8 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		Robot.drivetrain.resetDriveEncoders();
+		Robot.drivetrain.resetGyro();
 		new driveTeleop().start();
 	}
 
@@ -129,8 +173,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		
-//		drivetrain.setDriveState(driveState.desiredState);
+
+		//sensor values
+		SmartDashboard.putNumber("Gyro getYaw", RobotMap.ahrs.getYaw());
+    	SmartDashboard.putNumber("driveLeft1.getPosition()", RobotMap.driveLeft1.getPosition());
+    	SmartDashboard.putNumber("driveRight1.getPosition()", RobotMap.driveRight1.getPosition());
+    	SmartDashboard.putNumber("driveLeft1.getOutputVoltage()", RobotMap.driveLeft1.getOutputVoltage());
+    	SmartDashboard.putNumber("driveRight1.getOutputVoltage()", RobotMap.driveRight1.getOutputVoltage());
 	}
 
 	/**

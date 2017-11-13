@@ -14,9 +14,6 @@ import enums.DriveState;
  */
 public class driveTeleop extends Command {
 
-	private double leftPower;
-	private double rightPower;
-
 	public driveTeleop() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -29,19 +26,23 @@ public class driveTeleop extends Command {
         RobotMap.driveLeft2.changeControlMode(TalonControlMode.PercentVbus);
         RobotMap.driveRight1.changeControlMode(TalonControlMode.PercentVbus);
         RobotMap.driveRight2.changeControlMode(TalonControlMode.PercentVbus);
+    	RobotMap.driveLeft1.setVoltageRampRate(1000);
+    	RobotMap.driveLeft2.setVoltageRampRate(1000);
+    	RobotMap.driveRight1.setVoltageRampRate(1000);
+    	RobotMap.driveRight2.setVoltageRampRate(1000);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		double X = OI.driverStick.getRawAxis(1);
-        double Y = -OI.driverStick.getRawAxis(0);
+		double X = OI.driverStick.getRawAxis(0);
+        double Y = -OI.driverStick.getRawAxis(1);
         double leftPower = 0;
         double rightPower = 0;
         double deadzone = 0.15;
         
         if(Math.abs(X)<deadzone && Math.abs(Y)<deadzone){
-        	leftPower=0;
-        	rightPower =0;
+        	leftPower	=0;
+        	rightPower 	=0;
         }
         else{
         	leftPower	= Y+(X*(1-Math.abs(.2*Y)));

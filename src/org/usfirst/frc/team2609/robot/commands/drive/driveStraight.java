@@ -9,6 +9,7 @@ import com.ctre.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import enums.DriveState;
+import enums.ShifterState;
 
 /**
  *
@@ -17,41 +18,39 @@ public class driveStraight extends Command {
 
 	private double leftPower;
 	private double rightPower;
-	private double leftTarget;
-	private double rightTarget;
 	SimPID driveLeft;
 	SimPID driveRight;
 	SimPID steering;
 	
-	double steeringP = 0;
-	double steeringI = 0;
-	double steeringD = 0;
-	double steeringTarget = 0;
-	double steeringMax = 0;
-	double steeringEps = 0;
-	double steeringOutput = 0;
+	double steeringP;
+	double steeringI;
+	double steeringD;
+	double steeringTarget;
+	double steeringMax;
+	double steeringEps;
+	double steeringOutput;
 	
-	double driveLeftP = 0;
-	double driveLeftI = 0;
-	double driveLeftD = 0;
-	double driveLeftTarget = 0;
-	double driveLeftMax = 0;
-	double driveLeftEps = 0;
-	double driveLeftDR = 0;
-	int driveLeftDC = 0;
-	double driveLeftOutput = 0;
+	double driveLeftP;
+	double driveLeftI;
+	double driveLeftD;
+	double driveLeftTarget;
+	double driveLeftMax;
+	double driveLeftEps;
+	double driveLeftDR;
+	int driveLeftDC;
+	double driveLeftOutput;
 	
-	double driveRightP = 0;
-	double driveRightI = 0;
-	double driveRightD = 0;
-	double driveRightTarget = 0;
-	double driveRightMax = 0;
-	double driveRightEps = 0;
-	double driveRightDR = 0;
-	int driveRightDC = 0;
-	double driveRightOutput = 0;
+	double driveRightP;
+	double driveRightI;
+	double driveRightD;
+	double driveRightTarget;
+	double driveRightMax;
+	double driveRightEps;
+	double driveRightDR;
+	int driveRightDC;
+	double driveRightOutput;
 
-	public driveStraight(DriveState desiredState,double driveLeftTarget,double driveRightTarget,double steeringTarget) {
+	public driveStraight(double driveLeftTarget,double driveRightTarget,double steeringTarget) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 		requires(Robot.drivetrain);
@@ -59,6 +58,10 @@ public class driveStraight extends Command {
     	this.driveRightTarget = driveRightTarget;
     	this.steeringTarget = steeringTarget;
     	
+    }
+
+    // Called just before this Command runs the first time
+    protected void initialize() {
         this.driveLeft = new SimPID();
         this.driveRight = new SimPID();
         this.steering = new SimPID();
@@ -66,6 +69,10 @@ public class driveStraight extends Command {
     	steering.resetPreviousVal();
     	driveLeft.resetPreviousVal();
     	driveRight.resetPreviousVal();
+
+        this.steering.setDesiredValue(steeringTarget);
+        this.driveLeft.setDesiredValue(driveLeftTarget);
+        this.driveRight.setDesiredValue(driveRightTarget);
         
         steeringP = (double)SmartDashboard.getNumber("Steering P: ",0);
         steeringI = (double)SmartDashboard.getNumber("Steering I: ",0);
@@ -101,19 +108,19 @@ public class driveStraight extends Command {
         this.driveRight.setDoneRange(driveRightDR);
         this.driveRight.setMinDoneCycles(driveRightDC);
         this.driveRight.setErrorEpsilon(driveRightEps);
-    }
-
-    // Called just before this Command runs the first time
-    protected void initialize() {
+    	
     	RobotMap.driveLeft1.changeControlMode(TalonControlMode.PercentVbus);
+    	RobotMap.driveLeft2.changeControlMode(TalonControlMode.PercentVbus);
     	RobotMap.driveRight1.changeControlMode(TalonControlMode.PercentVbus);
+    	RobotMap.driveRight2.changeControlMode(TalonControlMode.PercentVbus);
     	RobotMap.driveLeft1.setVoltageRampRate(24);
     	RobotMap.driveLeft2.setVoltageRampRate(24);
     	RobotMap.driveRight1.setVoltageRampRate(24);
     	RobotMap.driveRight2.setVoltageRampRate(24);
-        this.steering.setDesiredValue(steeringTarget);
-        this.driveLeft.setDesiredValue(leftTarget);
-        this.driveRight.setDesiredValue(rightTarget);
+    	
+    	Robot.shifter.setShifterState(ShifterState.LOW);
+    	Robot.drivetrain.resetDriveEncoders();
+    	Robot.drivetrain.resetGyro();
     }
 
     // Called repeatedly when this Command is scheduled to run
