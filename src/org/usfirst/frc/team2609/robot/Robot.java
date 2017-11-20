@@ -11,6 +11,7 @@ import enums.ClawState;
 import enums.ShifterState;
 
 import org.usfirst.frc.team2609.robot.commands.clawState;
+import org.usfirst.frc.team2609.robot.commands.drive.driveCurvePath;
 import org.usfirst.frc.team2609.robot.commands.drive.driveStraight;
 import org.usfirst.frc.team2609.robot.commands.drive.driveTeleop;
 import org.usfirst.frc.team2609.robot.subsystems.*;
@@ -82,6 +83,7 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("drive straight 10", new driveStraight(10,10,0));
         chooser.addObject("drive straight 50", new driveStraight(50,50,0));
         chooser.addObject("drive straight 100", new driveStraight(100,100,0));
+        chooser.addObject("drive curve", new driveCurvePath());
         chooser.addObject("open claw", new clawState(ClawState.OPEN));
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
