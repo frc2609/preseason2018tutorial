@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("DriveLeft D: ", 0.0);
     	SmartDashboard.putNumber("DriveLeft Max: ", 0.8);
     	SmartDashboard.putNumber("DriveLeft Eps: ", 1.0);
-    	SmartDashboard.putNumber("DriveLeft DR: ", 1.0);
+    	SmartDashboard.putNumber("DriveLeft DR: ", 1);
     	SmartDashboard.putNumber("DriveLeft DC: ", 5);
     	//Right drive PID
 		SmartDashboard.putNumber("DriveRight P: ", 0.02);
@@ -67,11 +67,11 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("DriveRight D: ", 0.0);
     	SmartDashboard.putNumber("DriveRight Max: ", 0.8);
     	SmartDashboard.putNumber("DriveRight Eps: ", 1.0);
-    	SmartDashboard.putNumber("DriveRight DR: ", 1.0);
+    	SmartDashboard.putNumber("DriveRight DR: ", 1);
     	SmartDashboard.putNumber("DriveRight DC: ", 5);
     	//Steering heading correction PID
-		SmartDashboard.putNumber("Steering P: ", 0.05);
-    	SmartDashboard.putNumber("Steering I: ", 0.000);
+		SmartDashboard.putNumber("Steering P: ", 0.03);
+    	SmartDashboard.putNumber("Steering I: ", 0.0001);
     	SmartDashboard.putNumber("Steering D: ", 0.0);
     	SmartDashboard.putNumber("Steering Max: ", 0.2);
 

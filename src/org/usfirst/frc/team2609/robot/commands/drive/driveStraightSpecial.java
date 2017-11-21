@@ -120,7 +120,6 @@ public class driveStraightSpecial extends Command {
     	
     	Robot.shifter.setShifterState(ShifterState.LOW);
     	Robot.drivetrain.resetDriveEncoders();
-    	Robot.drivetrain.resetGyro();
     }
 
     // Called repeatedly when this Command is scheduled to run
