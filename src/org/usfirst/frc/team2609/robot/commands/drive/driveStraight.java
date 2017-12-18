@@ -29,11 +29,12 @@ public class driveStraight extends Command {
 	double steeringMax;
 	double steeringEps;
 	double steeringOutput;
+
+	double driveTarget;
 	
 	double driveLeftP;
 	double driveLeftI;
 	double driveLeftD;
-	double driveLeftTarget;
 	double driveLeftMax;
 	double driveLeftEps;
 	double driveLeftDR;
@@ -43,19 +44,17 @@ public class driveStraight extends Command {
 	double driveRightP;
 	double driveRightI;
 	double driveRightD;
-	double driveRightTarget;
 	double driveRightMax;
 	double driveRightEps;
 	double driveRightDR;
 	int driveRightDC;
 	double driveRightOutput;
 
-	public driveStraight(double driveLeftTarget,double driveRightTarget,double steeringTarget) {
+	public driveStraight(double driveTarget,double steeringTarget) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 		requires(Robot.drivetrain);
-    	this.driveLeftTarget = driveLeftTarget;
-    	this.driveRightTarget = driveRightTarget;
+    	this.driveTarget = driveTarget;
     	this.steeringTarget = steeringTarget;
     	
     }
@@ -71,8 +70,8 @@ public class driveStraight extends Command {
     	driveRight.resetPreviousVal();
 
         this.steering.setDesiredValue(steeringTarget);
-        this.driveLeft.setDesiredValue(driveLeftTarget);
-        this.driveRight.setDesiredValue(driveRightTarget);
+        this.driveLeft.setDesiredValue(driveTarget);
+        this.driveRight.setDesiredValue(driveTarget);
         
         steeringP = (double)SmartDashboard.getNumber("Steering P: ",0);
         steeringI = (double)SmartDashboard.getNumber("Steering I: ",0);

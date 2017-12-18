@@ -84,9 +84,9 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("driveLeft1.getPosition()", RobotMap.driveLeft1.getPosition());
     	SmartDashboard.putNumber("driveRight1.getPosition()", RobotMap.driveRight1.getPosition());
 		
-		chooser.addDefault("drive straight 10", new driveStraight(10,10,0));
-        chooser.addObject("drive straight 50", new driveStraight(50,50,0));
-        chooser.addObject("drive straight 100", new driveStraight(100,100,0));
+		chooser.addDefault("drive straight 10", new driveStraight(10,0));
+        chooser.addObject("drive straight 50", new driveStraight(50,0));
+        chooser.addObject("drive straight 100", new driveStraight(100,0));
         chooser.addObject("drive curve", new driveCurvePath());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);

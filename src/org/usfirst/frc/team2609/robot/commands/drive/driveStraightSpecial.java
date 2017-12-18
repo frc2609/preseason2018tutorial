@@ -29,11 +29,12 @@ public class driveStraightSpecial extends Command {
 	double steeringMax;
 	double steeringEps;
 	double steeringOutput;
+
+	double driveTarget;
 	
 	double driveLeftP;
 	double driveLeftI;
 	double driveLeftD;
-	double driveLeftTarget;
 	double driveLeftMax;
 	double driveLeftEps;
 	double driveLeftDR;
@@ -43,19 +44,20 @@ public class driveStraightSpecial extends Command {
 	double driveRightP;
 	double driveRightI;
 	double driveRightD;
-	double driveRightTarget;
 	double driveRightMax;
 	double driveRightEps;
 	double driveRightDR;
 	int driveRightDC;
 	double driveRightOutput;
+	
+	double absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
+	double absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
 
-	public driveStraightSpecial(double driveLeftTarget,double driveRightTarget,double steeringTarget) {
+	public driveStraightSpecial(double driveTarget,double steeringTarget) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 		requires(Robot.drivetrain);
-    	this.driveLeftTarget = driveLeftTarget;
-    	this.driveRightTarget = driveRightTarget;
+    	this.driveTarget = driveTarget;
     	this.steeringTarget = steeringTarget;
     	
     }
@@ -71,8 +73,8 @@ public class driveStraightSpecial extends Command {
     	driveRight.resetPreviousVal();
 
         this.steering.setDesiredValue(steeringTarget);
-        this.driveLeft.setDesiredValue(driveLeftTarget);
-        this.driveRight.setDesiredValue(driveRightTarget);
+        this.driveLeft.setDesiredValue(driveTarget);
+        this.driveRight.setDesiredValue(driveTarget);
         
         steeringP = (double)SmartDashboard.getNumber("Steering P: ",0);
         steeringI = (double)SmartDashboard.getNumber("Steering I: ",0);
@@ -120,22 +122,37 @@ public class driveStraightSpecial extends Command {
     	
     	Robot.shifter.setShifterState(ShifterState.LOW);
     	Robot.drivetrain.resetDriveEncoders();
+    	
+    	absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
+    	absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
+    	absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
+    	
     	steeringOutput = -steering.calcPID(RobotMap.ahrs.getYaw());
     	driveLeftOutput = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());
     	driveRightOutput = driveRight.calcPID(RobotMap.driveRight1.getPosition());
     	
-    	leftPower = driveLeftOutput - steeringOutput;
-    	rightPower = driveRightOutput + steeringOutput;
-    	Robot.drivetrain.setDriveState(DriveState.AUTON,leftPower+0.2,rightPower+0.2);
+    	if((absLeftPosition < Math.abs(driveTarget) - 10) && (absRightPosition < Math.abs(driveTarget) - 10)){
+        	leftPower = driveLeftOutput - steeringOutput;
+        	rightPower = driveRightOutput + steeringOutput;
+    	}else if(RobotMap.driveLeft1.getPosition() < driveTarget){
+    		leftPower = 0.2 - steeringOutput;
+    		rightPower = 0.2 + steeringOutput;
+    	}else{
+    		leftPower = -0.2 - steeringOutput;
+    		rightPower = -0.2 + steeringOutput;
+    	}
+    	
+    	Robot.drivetrain.setDriveState(DriveState.AUTON,leftPower,rightPower);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return driveLeft.isDone()&&driveRight.isDone();
+    	return ((absLeftPosition > Math.abs(driveTarget)) && (absRightPosition > Math.abs(driveTarget)));
     }
 
     // Called once after isFinished returns true

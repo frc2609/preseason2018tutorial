@@ -13,14 +13,14 @@ import enums.ClawPusherState;
 public class driveCurvePath extends CommandGroup {
 
     public driveCurvePath() {
-    	addSequential(new driveStraightSpecial(67,67,0));
-    	addSequential(new driveTurn(0.5,90));
-    	addSequential(new driveStraight(49,49,90));
+    	addSequential(new driveStraightSpecial(48,0));
+    	addSequential(new driveTurn(0.5,45));
+    	addSequential(new driveStraightSpecial(24,45));
     	addSequential(new clawGrabberState(ClawGrabberState.OPEN));
     	addSequential(new clawPusherState(ClawPusherState.PUSH));
-    	addSequential(new driveStraightSpecial(-67,-67,90));
+    	addSequential(new driveStraightSpecial(-24,0));
     	addSequential(new driveTurn(0.5,0));
-    	addSequential(new driveStraight(-49,-49,0));
+    	addSequential(new driveStraightSpecial(-48,0));
     	
     }
 }

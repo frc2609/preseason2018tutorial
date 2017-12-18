@@ -68,8 +68,8 @@ public class driveTurn extends Command {
         
     	steering.resetPreviousVal();
         this.steering.setDesiredValue(steeringTarget);
-        this.driveLeft.setDesiredValue(0);
-        this.driveRight.setDesiredValue(0);
+        this.driveLeft.setDesiredValue(0);				//keep wheel stopped
+        this.driveRight.setDesiredValue(0);				//keep wheel stopped
         
         steeringP = 0.012;
         steeringI = 0.0005;
@@ -131,19 +131,29 @@ public class driveTurn extends Command {
     protected void execute() {
     	steeringOutput = steering.calcPID(RobotMap.ahrs.getYaw());
     	if (turnDirection == 0){
-        	leftPower =  steeringOutput;
-        	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
+    		if(Math.abs(RobotMap.ahrs.getYaw()) < (Math.abs(steeringTarget) - 10)){
+            	leftPower =  steeringOutput;
+            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
+    		}else{
+            	leftPower =  0.1;
+            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
+    		}
     	}
     	else{
-    		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
-        	rightPower = steeringOutput;
+    		if(Math.abs(RobotMap.ahrs.getYaw()) < (Math.abs(steeringTarget) - 10)){
+        		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
+            	rightPower = -steeringOutput;
+    		}else{
+        		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
+            	rightPower = 0.1;
+    		}
     	}
     	Robot.drivetrain.setDriveState(DriveState.AUTON,leftPower,rightPower);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return steering.isDone();
+    	return (Math.abs(RobotMap.ahrs.getYaw()) > (Math.abs(steeringTarget)));
     }
 
     // Called once after isFinished returns true
