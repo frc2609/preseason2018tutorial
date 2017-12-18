@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import enums.ClawState;
+import enums.ClawDeployState;
 import enums.ShifterState;
 
-import org.usfirst.frc.team2609.robot.commands.clawState;
+import org.usfirst.frc.team2609.robot.commands.clawDeployState;
 import org.usfirst.frc.team2609.robot.commands.drive.driveCurvePath;
 import org.usfirst.frc.team2609.robot.commands.drive.driveStraight;
 import org.usfirst.frc.team2609.robot.commands.drive.driveTeleop;
@@ -27,7 +27,9 @@ public class Robot extends IterativeRobot {
 	
 	//subsystem initialization
 	public static Shifter shifter;
-	public static Claw claw;
+	public static ClawDeploy clawDeploy;
+	public static ClawGrabber clawGrabber;
+	public static ClawPusher clawPusher;
 	public static Climber climber;
 	public static Drivetrain drivetrain;
 	
@@ -46,7 +48,9 @@ public class Robot extends IterativeRobot {
 		RobotMap.init();			//imports all of RobotMap, required to not crash on start up
 		
 		shifter = new Shifter();
-		claw = new Claw();
+		clawDeploy = new ClawDeploy();
+		clawGrabber = new ClawGrabber();
+		clawPusher = new ClawPusher();
 		climber = new Climber();
 		drivetrain = new Drivetrain();
 		
@@ -84,7 +88,6 @@ public class Robot extends IterativeRobot {
         chooser.addObject("drive straight 50", new driveStraight(50,50,0));
         chooser.addObject("drive straight 100", new driveStraight(100,100,0));
         chooser.addObject("drive curve", new driveCurvePath());
-        chooser.addObject("open claw", new clawState(ClawState.OPEN));
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 		

@@ -2,7 +2,9 @@ package org.usfirst.frc.team2609.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import enums.ClawState;
+import enums.ClawDeployState;
+import enums.ClawGrabberState;
+import enums.ClawPusherState;
 import enums.DriveState;
 import enums.ShifterState;
 import org.usfirst.frc.team2609.robot.commands.*;
@@ -67,22 +69,22 @@ public class OI {
 		driverButton2.whenPressed(new shifterState(ShifterState.LOW));
 		
 		driverButton3 = new JoystickButton(driverStick, 3);
-		driverButton3.whenPressed(new clawState(ClawState.OPEN));
+		driverButton3.whenPressed(new clawGrabberState(ClawGrabberState.OPEN));
 		
 		driverButton4 = new JoystickButton(driverStick, 4);
-		driverButton4.whenPressed(new clawState(ClawState.CLOSE));
+		driverButton4.whenPressed(new clawGrabberState(ClawGrabberState.CLOSE));
 		
 		driverButton5 = new JoystickButton(driverStick, 5);
-		driverButton5.whenPressed(new clawState(ClawState.UP));
+		driverButton5.whenPressed(new clawDeployState(ClawDeployState.UP));
 		
 		driverButton6 = new JoystickButton(driverStick, 6);
-		driverButton6.whenPressed(new clawState(ClawState.DOWN));
+		driverButton6.whenPressed(new clawDeployState(ClawDeployState.DOWN));
 		
 		driverButton6 = new JoystickButton(driverStick, 7);
-		driverButton6.whenPressed(new clawState(ClawState.PUSH));
+		driverButton6.whenPressed(new clawPusherState(ClawPusherState.PUSH));
 		
 		driverButton6 = new JoystickButton(driverStick, 8);
-		driverButton6.whenPressed(new clawState(ClawState.RETRACT));
+		driverButton6.whenPressed(new clawPusherState(ClawPusherState.RETRACT));
 		
 		driverButton10 = new JoystickButton(driverStick, 10);
 		driverButton10.whenPressed(new driveStraight(20,20,0));

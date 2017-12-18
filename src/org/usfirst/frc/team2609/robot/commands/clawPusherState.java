@@ -3,17 +3,16 @@ package org.usfirst.frc.team2609.robot.commands;
 import org.usfirst.frc.team2609.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import enums.ClawState;
-import enums.ShifterState;
+import enums.ClawPusherState;
 
 /**
  *
  */
-public class clawState extends Command {
+public class clawPusherState extends Command {
 
-    private ClawState desiredState;
+    private ClawPusherState desiredState;
     
-    public clawState(ClawState desiredState) {
+    public clawPusherState(ClawPusherState desiredState) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	this.desiredState = desiredState;
@@ -21,7 +20,7 @@ public class clawState extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.claw.setClawState(desiredState);
+    	Robot.clawPusher.setClawState(desiredState);
     }
 
     // Called repeatedly when this Command is scheduled to run
