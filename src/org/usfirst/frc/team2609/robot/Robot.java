@@ -100,7 +100,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		shifter.setShifterState(ShifterState.HIGH); //makes it easier to push the robot when its disabled
+//		shifter.setShifterState(ShifterState.HIGH); //makes it easier to push the robot when its disabled
 	}
 
 	@Override
@@ -128,6 +128,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		Robot.drivetrain.resetDriveEncoders();
 		Robot.drivetrain.resetGyro();
+		shifter.setShifterState(ShifterState.LOW);
 		autonomousCommand = chooser.getSelected();
 
 		/*

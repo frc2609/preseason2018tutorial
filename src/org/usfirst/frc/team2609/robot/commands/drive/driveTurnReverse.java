@@ -14,7 +14,7 @@ import enums.ShifterState;
 /**
  *
  */
-public class driveTurn extends Command {
+public class driveTurnReverse extends Command {
 
 	private double leftPower;
 	private double rightPower;
@@ -52,7 +52,7 @@ public class driveTurn extends Command {
 	
 	int turnDirection;
 	
-	public driveTurn(double drivePower,double steeringTarget) {
+	public driveTurnReverse(double drivePower,double steeringTarget) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 		requires(Robot.drivetrain);
@@ -129,20 +129,20 @@ public class driveTurn extends Command {
     	steeringOutput = steering.calcPID(RobotMap.ahrs.getYaw());
     	if (turnDirection == 0){
     		if(RobotMap.ahrs.getYaw() < steeringTarget - 10){
-            	leftPower =  steeringOutput;
-            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
+            	leftPower =  driveLeft.calcPID(RobotMap.driveLeft1.getPosition());
+            	rightPower = -steeringOutput;
     		}else{
-            	leftPower =  0.15;
-            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
+            	leftPower =  driveLeft.calcPID(RobotMap.driveLeft1.getPosition());
+            	rightPower = -0.3;
     		}
     	}
     	else{
     		if(RobotMap.ahrs.getYaw() > steeringTarget + 10){
-        		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
-            	rightPower = -steeringOutput;
+        		leftPower = steeringOutput;
+            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());
     		}else{
-        		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
-            	rightPower = 0.15;
+        		leftPower = -0.3;
+            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());
     		}
     	}
     	Robot.drivetrain.setDriveState(DriveState.AUTON,leftPower,rightPower);

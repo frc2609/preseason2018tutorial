@@ -120,9 +120,6 @@ public class driveStraightSpecial extends Command {
     	RobotMap.driveRight1.setVoltageRampRate(24);
     	RobotMap.driveRight2.setVoltageRampRate(24);
     	
-    	Robot.shifter.setShifterState(ShifterState.LOW);
-    	Robot.drivetrain.resetDriveEncoders();
-    	
     	absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
     	absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
     }
@@ -139,12 +136,9 @@ public class driveStraightSpecial extends Command {
     	if((absLeftPosition < Math.abs(driveTarget) - 10) && (absRightPosition < Math.abs(driveTarget) - 10)){
         	leftPower = driveLeftOutput - steeringOutput;
         	rightPower = driveRightOutput + steeringOutput;
-    	}else if(RobotMap.driveLeft1.getPosition() < driveTarget){
+    	}else {
     		leftPower = 0.2 - steeringOutput;
     		rightPower = 0.2 + steeringOutput;
-    	}else{
-    		leftPower = -0.2 - steeringOutput;
-    		rightPower = -0.2 + steeringOutput;
     	}
     	
     	Robot.drivetrain.setDriveState(DriveState.AUTON,leftPower,rightPower);

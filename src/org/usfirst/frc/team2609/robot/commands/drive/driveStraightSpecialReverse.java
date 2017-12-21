@@ -14,7 +14,7 @@ import enums.ShifterState;
 /**
  *
  */
-public class driveTurn extends Command {
+public class driveStraightSpecialReverse extends Command {
 
 	private double leftPower;
 	private double rightPower;
@@ -29,11 +29,12 @@ public class driveTurn extends Command {
 	double steeringMax;
 	double steeringEps;
 	double steeringOutput;
+
+	double driveTarget;
 	
 	double driveLeftP;
 	double driveLeftI;
 	double driveLeftD;
-	double driveLeftTarget;
 	double driveLeftMax;
 	double driveLeftEps;
 	double driveLeftDR;
@@ -43,19 +44,20 @@ public class driveTurn extends Command {
 	double driveRightP;
 	double driveRightI;
 	double driveRightD;
-	double driveRightTarget;
 	double driveRightMax;
 	double driveRightEps;
 	double driveRightDR;
 	int driveRightDC;
 	double driveRightOutput;
 	
-	int turnDirection;
-	
-	public driveTurn(double drivePower,double steeringTarget) {
+	double absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
+	double absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
+
+	public driveStraightSpecialReverse(double driveTarget,double steeringTarget) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 		requires(Robot.drivetrain);
+    	this.driveTarget = driveTarget;
     	this.steeringTarget = steeringTarget;
     	
     }
@@ -67,24 +69,26 @@ public class driveTurn extends Command {
         this.steering = new SimPID();
         
     	steering.resetPreviousVal();
+    	driveLeft.resetPreviousVal();
+    	driveRight.resetPreviousVal();
+
         this.steering.setDesiredValue(steeringTarget);
-        this.driveLeft.setDesiredValue(0);				//keep wheel stopped
-        this.driveRight.setDesiredValue(0);				//keep wheel stopped
+        this.driveLeft.setDesiredValue(driveTarget);
+        this.driveRight.setDesiredValue(driveTarget);
         
-        steeringP = 0.012;
-        steeringI = 0.0005;
-        steeringD = 0;
+        steeringP = (double)SmartDashboard.getNumber("Steering P: ",0);
+        steeringI = (double)SmartDashboard.getNumber("Steering I: ",0);
+        steeringD = (double)SmartDashboard.getNumber("Steering D: ",0);
+        steeringMax = (double)SmartDashboard.getNumber("Steering Max: ",0);
         this.steering.setConstants(steeringP, steeringI, steeringD);
-        this.steering.setMaxOutput(1.0);
-        this.steering.setDoneRange(1.0);
-        this.steering.setMinDoneCycles(10);
+        this.steering.setMaxOutput(steeringMax);
         
         driveLeftP = (double)SmartDashboard.getNumber("DriveLeft P: ",0);
         driveLeftI = (double)SmartDashboard.getNumber("DriveLeft I: ",0);
         driveLeftD = (double)SmartDashboard.getNumber("DriveLeft D: ",0);
         driveLeftMax = 0.6;
-        driveLeftDC = 0;
-        driveLeftDR = 0.1;
+        driveLeftDC = 1;
+        driveLeftDR = 1;
         driveLeftEps = 1;
         
         driveRightP = (double)SmartDashboard.getNumber("DriveRight P: ",0);
@@ -106,7 +110,7 @@ public class driveTurn extends Command {
         this.driveRight.setDoneRange(driveRightDR);
         this.driveRight.setMinDoneCycles(driveRightDC);
         this.driveRight.setErrorEpsilon(driveRightEps);
-        
+    	
     	RobotMap.driveLeft1.changeControlMode(TalonControlMode.PercentVbus);
     	RobotMap.driveLeft2.changeControlMode(TalonControlMode.PercentVbus);
     	RobotMap.driveRight1.changeControlMode(TalonControlMode.PercentVbus);
@@ -116,45 +120,33 @@ public class driveTurn extends Command {
     	RobotMap.driveRight1.setVoltageRampRate(24);
     	RobotMap.driveRight2.setVoltageRampRate(24);
     	
-    	if (RobotMap.ahrs.getYaw()<steeringTarget){
-    		turnDirection = 0;	//right turn
-    	}
-    	else{
-    		turnDirection = 1;	//left turn
-    	}
+    	absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
+    	absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	steeringOutput = steering.calcPID(RobotMap.ahrs.getYaw());
-    	if (turnDirection == 0){
-    		if(RobotMap.ahrs.getYaw() < steeringTarget - 10){
-            	leftPower =  steeringOutput;
-            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
-    		}else{
-            	leftPower =  0.15;
-            	rightPower = driveRight.calcPID(RobotMap.driveRight1.getPosition());;
-    		}
+    	absLeftPosition = Math.abs(RobotMap.driveLeft1.getPosition());
+    	absRightPosition = Math.abs(RobotMap.driveRight1.getPosition());
+    	
+    	steeringOutput = -steering.calcPID(RobotMap.ahrs.getYaw());
+    	driveLeftOutput = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());
+    	driveRightOutput = driveRight.calcPID(RobotMap.driveRight1.getPosition());
+    	
+    	if((absLeftPosition < Math.abs(driveTarget) - 10) && (absRightPosition < Math.abs(driveTarget) - 10)){
+        	leftPower = driveLeftOutput - steeringOutput;
+        	rightPower = driveRightOutput + steeringOutput;
+    	}else{
+    		leftPower = -0.2 - steeringOutput;
+    		rightPower = -0.2 + steeringOutput;
     	}
-    	else{
-    		if(RobotMap.ahrs.getYaw() > steeringTarget + 10){
-        		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
-            	rightPower = -steeringOutput;
-    		}else{
-        		leftPower = driveLeft.calcPID(RobotMap.driveLeft1.getPosition());;
-            	rightPower = 0.15;
-    		}
-    	}
+    	
     	Robot.drivetrain.setDriveState(DriveState.AUTON,leftPower,rightPower);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (turnDirection == 0){
-    		return (RobotMap.ahrs.getYaw() > steeringTarget);
-    	}else{
-    		return (RobotMap.ahrs.getYaw() < steeringTarget);
-    	}
+    	return ((absLeftPosition > Math.abs(driveTarget)) && (absRightPosition > Math.abs(driveTarget)));
     }
 
     // Called once after isFinished returns true
